@@ -45,9 +45,22 @@ Request = Request-Line
 POST / HTTP/1.1
 host: 127.0.0.1
 Content-Type: application/x-www-form-urlencoded
+Content-Length: 19
 
-field1=aaa&code=x%3D1
+field1=aaa&code=bbb
 ```
+
+有两种 Content-Type 必须要学会：
+
+1. `application/x-www-form-urlencoded`
+
+   body 的形式为 `field1=aaa&code=bbb`
+
+2. `application/json`
+
+   body 的形式为 `{"name": "frank"}`
+
+注意，如果传递了 body，还需要指定 Content-Length。
 
 ## Response
 
