@@ -1,4 +1,5 @@
 const net = require("net");
+const { ResponseParser } = require("./ResponseParser");
 
 class Request {
   constructor(options) {
@@ -46,24 +47,44 @@ class Request {
     return `${this.bodyText}\r\n`;
   }
 
-  send() {
-    const client = net.createConnection(
-      {
-        port: this.port,
-        host: this.host,
-      },
-      () => {
-        console.log("connected to server!");
-        // socket 中写入 HTTP Request 格式的字符串
-        client.write(this.toString());
+  send(connection) {
+    return new Promise((resolve, reject) => {
+      const parser = new ResponseParser();
+      if (connection) {
+        connection.write(this.toString());
+      } else {
+        connection = net.createConnection(
+          {
+            port: this.port,
+            host: this.host,
+          },
+          () => {
+            console.log("connected to server!");
+            // socket 中写入 HTTP Request 格式的字符串
+            connection.write(this.toString());
+          }
+        );
+
+        connection.on("data", (data) => {
+          // 由于 TCP 是流式传输，我们压根不知道 data 是不是一个完整的返回。也就是说， onData 事件可能发生多次。
+          // 所以每次触发新的 onData 事件，就将返回的 data 数据流喂给状态机。
+          console.log(data.toString());
+          parser.receive(data.toString());
+          if (parser.isFinished) {
+            resolve(parser.response);
+            connection.end();
+          }
+        });
+
+        connection.on("end", () => {
+          console.log("disconnected from server");
+        });
+
+        connection.on("error", (err) => {
+          reject(err);
+          connection.end();
+        });
       }
-    );
-    client.on("data", (data) => {
-      console.log(data.toString());
-      client.end();
-    });
-    client.on("end", () => {
-      console.log("disconnected from server");
     });
   }
 }

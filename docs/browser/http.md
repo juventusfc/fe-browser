@@ -79,9 +79,14 @@ Response = Status-Line
 常见的例子是：
 
 ```text
-POST / HTTP/1.1
-host: 127.0.0.1
-Content-Type: application/x-www-form-urlencoded
+HTTP/1.1 200 OK
+Content-Type: text/html
+Date: Sun, 04 Oct 2020 12:02:37 GMT
+Connection: keep-alive
+Transfer-Encoding: chunked
 
-field1=aaa&code=x%3D1
+c
+Hello world
+
+0
 ```

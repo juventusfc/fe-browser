@@ -8,6 +8,7 @@ void (async function () {
     port: 8088,
     headers: {
       "Content-Type": "application/json",
+      "X-Foo2": "customed",
     },
     body: {
       name: "frank",
