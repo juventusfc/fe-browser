@@ -1,4 +1,13 @@
 const http = require("http");
+const fs = require("fs");
+
+let htmlData;
+fs.readFile("./example.html", "utf8", function (err, data) {
+  if (err) {
+    return console.log(err);
+  }
+  htmlData = data;
+});
 
 http
   .createServer((req, res) => {
@@ -14,7 +23,7 @@ http
         body = Buffer.concat(body).toString();
         console.log("body", body);
         res.writeHead(200, { "Content-Type": "text/html" });
-        res.end("Hello world\n");
+        res.end(htmlData);
       });
   })
   .listen(8088);
