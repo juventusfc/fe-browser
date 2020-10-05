@@ -1,4 +1,5 @@
 const net = require("net");
+const { parse } = require("path");
 const { ResponseParser } = require("./ResponseParser");
 
 class Request {
@@ -71,6 +72,7 @@ class Request {
           console.log(data.toString());
           parser.receive(data.toString());
           if (parser.isFinished) {
+            console.log("&&&&", parser.response);
             resolve(parser.response);
             connection.end();
           }
