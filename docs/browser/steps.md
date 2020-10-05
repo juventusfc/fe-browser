@@ -7,3 +7,5 @@
       1. 返回一个 Promise。
       2. 基于 net 库，使用 `net.createConnection` 创建一个 Socket，前后端进行通信。通过 write 方法在 socket 中写入 HTTP Request 文本。
       3. 由于是 TCP 传输，onData 事件会不断触发，所以需要使用 ResponseParser，将后端返回过来的流式字符串使用状态机进行处理。
+         1. 画出状态转移图
+         2. 代码实现

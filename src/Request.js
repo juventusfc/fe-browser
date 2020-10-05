@@ -70,10 +70,9 @@ class Request {
           // 由于 TCP 是流式传输，我们压根不知道 data 是不是一个完整的返回。也就是说， onData 事件可能发生多次。
           // 所以每次触发新的 onData 事件，就将返回的 data 数据流喂给状态机。
           // 如果你要测试 onData 触发了多少次，可以在 server 中返回更大的数据量，然后在 onData 这里打断点观察。
-          console.log(data.toString());
+          // console.log(data.toString());
           parser.receive(data.toString());
           if (parser.isFinished) {
-            console.log("&&&&", parser.response);
             resolve(parser.response);
             connection.end();
           }

@@ -15,4 +15,5 @@ void (async function () {
     },
   });
   const response = await request.send();
+  console.log(response);
 })();
