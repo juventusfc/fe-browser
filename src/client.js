@@ -1,4 +1,5 @@
 const { Request } = require("./Request");
+const { HTMLParser } = require("./HTMLParser");
 
 void (async function () {
   let request = new Request({
@@ -15,5 +16,6 @@ void (async function () {
     },
   });
   const response = await request.send();
-  console.log(response);
+  const dom = HTMLParser.parse(response.body);
+  console.log(dom);
 })();
