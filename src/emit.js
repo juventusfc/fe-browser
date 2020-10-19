@@ -23,7 +23,14 @@ const createEndTagToken = (tagName = "") => {
   };
 };
 
+const createEOFToken = (tagName = "") => {
+  return {
+    type: "EOF_TOKEN",
+  };
+};
+
 exports.emit = emit;
 exports.createStartTagToken = createStartTagToken;
 exports.createTextToken = createTextToken;
 exports.createEndTagToken = createEndTagToken;
+exports.createEOFToken = createEOFToken;
