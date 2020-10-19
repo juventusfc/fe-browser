@@ -7,8 +7,8 @@ class HTMLParser {
       state = state(c);
       // console.log(state.name);
     }
-    state = state(EOF);
-    return html;
+    let dom = state(EOF);
+    return dom;
   }
 }
 

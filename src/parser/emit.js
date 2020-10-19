@@ -1,5 +1,60 @@
+let currentTextNode = null;
+let stack = [{ type: "document", children: [] }];
+
 const emit = (token) => {
-  console.log(token);
+  let top = stack[stack.length - 1];
+  switch (token.type) {
+    case "TEXT_TOKEN":
+      if (!currentTextNode) {
+        currentTextNode = {
+          type: "text",
+          content: "",
+        };
+        top.children.push(currentTextNode);
+      }
+      currentTextNode.content += token.content;
+      break;
+
+    case "START_TAG_TOKEN":
+      let element = {
+        type: "element",
+        tagName: token.tagName,
+        attributes: [],
+        children: [],
+        parent: top,
+      };
+
+      for (let p in token) {
+        if (p !== "type" && p !== "tagName") {
+          element.attributes.push({
+            name: p,
+            value: token[p],
+          });
+        }
+      }
+
+      top.children.push(element);
+
+      if (!token.isSelfClosing) {
+        stack.push(element);
+      }
+
+      currentTextNode = null;
+      break;
+
+    case "END_TAG_TOKEN":
+      stack.pop();
+
+      currentTextNode = null;
+      break;
+
+    case "EOF_TOKEN":
+      return stack[0];
+      break;
+
+    default:
+      break;
+  }
 };
 
 const createTextToken = (c) => {
@@ -13,6 +68,7 @@ const createStartTagToken = (tagName = "") => {
   return {
     type: "START_TAG_TOKEN",
     tagName,
+    isSelfClosing: false,
   };
 };
 

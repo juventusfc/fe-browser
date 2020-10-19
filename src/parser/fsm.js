@@ -15,8 +15,7 @@ const data = (c) => {
   if (c === "<") {
     return tagOpen;
   } else if (c === EOF) {
-    emit(createEOFToken());
-    return;
+    return emit(createEOFToken());
   } else {
     currentToken = createTextToken(c);
     emit(currentToken);
@@ -50,7 +49,7 @@ const tagName = (c) => {
     return data;
   } else {
     currentToken.tagName += c;
-    return;
+    return tagName;
   }
 };
 
