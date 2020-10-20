@@ -12,6 +12,7 @@ const compare = (sp1, sp2) => {
   return true;
 };
 
+// ['h1' 'body'] 这样
 const getSpecificity = (selectors) => {
   let i = 0;
   let j = 0;
@@ -30,6 +31,8 @@ const getSpecificity = (selectors) => {
   return [0, i, j, k];
 };
 
+// element {tagName,...} 之类
+// selector 'h1' 之类
 const match = (element, selector) => {
   if (!selector || !element.attributes) {
     return false;
