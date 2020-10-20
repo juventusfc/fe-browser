@@ -43,3 +43,12 @@
    3. 添加调用。当我们创建 DOM element 时，就会将 rules 应用于 element。
    4. 获取父元素序列。CSS 中，需要知道当前元素的所有父元素才能判断是否与 rule 匹配。rule 中，selector 是按照 `父->子` 的次序排列，子表示当前 element。如 `div #goods` 选择器表示匹配 id 为 goods 的元素，同时这个元素的父元素是 div。
    5. 选择器与元素匹配。这里有个 trick，其实我们要比较 elements 和 selectors 的匹配关系，我们将他们都放在数组里，我们从子到父的次序进行判断，所以有一个 reverse 的过程。这样，也就抽象为两个数组之间的匹配了。当然，我们还需要根据选择器的类型，判断选择器和当前 element 的匹配情况。
+   6. 生成 computedStyle 属性，将 css 应用于 element。这一步暂不考虑 CSS 的优先级（specificity）问题。
+   7. 计算 CSS rule 的 specificity。一般的，我们使用一个四元组确定 specificity：
+
+      ```text
+      [0, 0, 0, 0]
+      第一个代表 inline，第二个代表 id，第三个代表 class，第四个代表 tagName
+      ```
+
+      根据 specificity 和后来优先规则覆盖 CSS。

@@ -16,6 +16,7 @@ const computeCSS = (element) => {
 
   for (let rule of rules) {
     let selectors = rule.selectors[0].split(" ").reverse();
+    let currentSpecificity = getSpecificity(selectors);
 
     if (!match(elements[0], selectors[0])) {
       continue;
@@ -34,10 +35,58 @@ const computeCSS = (element) => {
     }
 
     if (matched) {
-      for (let declaration of rule.declarations)
-        element.computedStyle[declaration.property] = declaration.value;
+      let computedStyle = element.computedStyle;
+      for (let declaration of rule.declarations) {
+        if (!computedStyle[declaration.property]) {
+          computedStyle[declaration.property] = {
+            value: "",
+            specificity: [0, 0, 0, 0],
+          };
+        }
+        if (
+          compare(
+            currentSpecificity,
+            computedStyle[declaration.property].specificity
+          )
+        ) {
+          computedStyle[declaration.property].value = declaration.value;
+          computedStyle[declaration.property].specificity = currentSpecificity;
+        }
+      }
     }
   }
+};
+
+const compare = (sp1, sp2) => {
+  for (let i = 0; i < 4; i++) {
+    if (sp1[i] > sp2[i]) {
+      return true;
+    } else if (sp1[i] < sp2[i]) {
+      return false;
+    } else {
+      continue;
+    }
+  }
+
+  return true;
+};
+
+const getSpecificity = (selectors) => {
+  let i = 0;
+  let j = 0;
+  let k = 0;
+
+  for (let selector of selectors) {
+    if (selector.charAt(0) === "#") {
+      i++;
+    } else if (selector.charAt(0) === ".") {
+      j++;
+    } else {
+      k++;
+    }
+  }
+
+  return [0, i, j, k];
 };
 
 const match = (element, selector) => {
