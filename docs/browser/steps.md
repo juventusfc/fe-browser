@@ -30,3 +30,16 @@
 
       let stack = [o];
       ```
+
+3. 计算 CSS。这一步的目的，是将 CSS 应用于 DOM，也就是说，在 element 上增加 computedStyle 属性。这一步，我们不对 `<link>` 指向的 CSS 文件做兼容。
+
+   1. 安装 css 包。该包能将字符串转换成 CSS 的 AST。
+
+      ```bash
+      npm i css
+      ```
+
+   2. 收集 CSS 规则。当 emit 的 endTag 是 style 时，使用 css 包，将规则存进 rules 中。
+   3. 添加调用。当我们创建 DOM element 时，就会将 rules 应用于 element。
+   4. 获取父元素序列。CSS 中，需要知道当前元素的所有父元素才能判断是否与 rule 匹配。rule 中，selector 是按照 `父->子` 的次序排列，子表示当前 element。如 `div #goods` 选择器表示匹配 id 为 goods 的元素，同时这个元素的父元素是 div。
+   5. 选择器与元素匹配。这里有个 trick，其实我们要比较 elements 和 selectors 的匹配关系，我们将他们都放在数组里，我们从子到父的次序进行判断，所以有一个 reverse 的过程。这样，也就抽象为两个数组之间的匹配了。当然，我们还需要根据选择器的类型，判断选择器和当前 element 的匹配情况。

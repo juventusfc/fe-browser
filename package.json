@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/juventusfc/fe-browser/issues"
   },
-  "homepage": "https://github.com/juventusfc/fe-browser#readme"
+  "homepage": "https://github.com/juventusfc/fe-browser#readme",
+  "dependencies": {
+    "css": "^3.0.0"
+  }
 }
